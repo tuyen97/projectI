@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <title>My Website</title>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="jquery.js"></script>
+    <script>
+        var i;
+        var socket = io("http://localhost:8000");
+        socket.on("length", function(data){
+              console.log(data);
+              i = data;
+        });
+        socket.on("fun", function (data) {
+            $("#title").html(data.title);
+            $("#imag").attr("src", data.img);
+            //console.log(data.img);
+            //console.log(data.title);
+            $("#fun").html("<pre>"+data.body+"</pre>");
+            //console.log(data.body);
+
+        });
+
+        $(document).ready(function () {
+            $("#refresh").click(function () {
+                var x = Math.floor((Math.random() * i) + 1);
+                console.log(x);
+                socket.emit("client", x);
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <h2 id="title"></h2>
+    <img id ="imag" src></img>
+    <div id="fun"></div>
+    <input type="button" id="refresh" value="Refresh" />
+</body>
